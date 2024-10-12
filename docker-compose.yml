@@ -1,0 +1,37 @@
+version: '3.4'
+
+services:
+  apitool:
+    image: apitool
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - 5000:5000
+    environment:
+      - FLASK_APP=apitool/app.py
+      - MONGO_URI=mongodb://mongodb:27017/my_database
+    volumes:
+      - ./schemas:/app/schemas
+    depends_on:
+      - mongodb
+    networks:
+      - frontend
+      - backend
+  mongodb:
+    image: mongo:5.0
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - backend
+
+volumes:
+  mongodb_data:
+
+networks:
+  frontend:
+  backend:
+    internal: true
