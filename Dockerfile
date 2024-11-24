@@ -12,10 +12,10 @@ ENV PYTHONUNBUFFERED=1
 
 # Install pip requirements
 COPY requirements.txt .
-RUN python -m pip install -r requirements.txt
+RUN python -m pip install -r requirements.txt && mkdir /app/schemas
 
 COPY  ./apitool /app/apitool
-COPY  ./schema/user.json /app/schemas/user.json
+COPY  ./schemas/user.json /app/schemas/user.json
 
 # Creates a non-root user with an explicit UID and adds permission to access the /app folder
 # For more info, please refer to https://aka.ms/vscode-docker-python-configure-containers
