@@ -1,17 +1,28 @@
 {
-    "type": "object",
-    "properties": {
-        "username": {
-            "type": "string"
+    "collection_name": "users",
+    "schema": {
+        "type": "object",
+        "properties": {
+            "username": {
+                "type": "string"
+            },
+            "email": {
+                "type": "string",
+                "format": "email"
+            },
+            "age": {
+                "type": "integer",
+                "minimum": 0
+            },
+            "password": {
+                "type": "string",
+                "minLength": 8
+            }
         },
-        "email": {
-            "type": "string",
-            "format": "email"
-        },
-        "age": {
-            "type": "integer",
-            "minimum": 0
-        }
-    },
-    "required": ["username", "email"]
+        "required": [
+            "username",
+            "email",
+            "password"
+        ]
+    }
 }

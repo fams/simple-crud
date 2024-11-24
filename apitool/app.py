@@ -7,6 +7,7 @@ from bson import ObjectId
 
 app = Flask(__name__)
 
+
 # Conectar ao MongoDB com o URI da variável de ambiente
 mongo_uri = os.getenv('MONGO_URI', 'mongodb://localhost:27017/')
 try:
@@ -25,10 +26,17 @@ schemas_dir = 'schemas'
 
 for filename in os.listdir(schemas_dir):
     if filename.endswith('.json'):
-        collection_name = filename[:-5]  # Remover a extensão '.json'
-        with open(os.path.join(schemas_dir, filename), 'r') as schema_file:
-            schema = json.load(schema_file)
-            schemas[collection_name] = schema
+        try:
+            with open(os.path.join(schemas_dir, filename), 'r') as schema_file:
+                definition = json.load(schema_file)
+            collection = definition["collection_name"]
+            schemas[collection] = definition["schema"]
+        except (IOError, json.JSONDecodeError) as e:
+            print(f"Erro ao carregar o esquema {filename}: {e}")
+            exit(1)
+        except KeyError as e:
+            print(f"Erro ao carregar o esquema {filename}: {e}")
+            exit(1) 
 
 
 def validate_json(data, schema):
