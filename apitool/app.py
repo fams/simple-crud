@@ -156,5 +156,19 @@ def delete_object(collection, object_id):
     return jsonify({"message": "Object deleted"})
 
 
+@app.route('/healthcheck', methods=['GET'])
+def healthcheck():
+    """
+    Verifica o estado do banco de dados e da aplicação.
+    Retorna 200 se tudo estiver funcionando corretamente.
+    """
+    try:
+        # Testa a conexão com o MongoDB
+        client.server_info()  # Isso levanta uma exceção se o banco estiver inacessível
+        return jsonify({"status": "healthy"}), 200
+    except errors.ServerSelectionTimeoutError:
+        return jsonify({"status": "unhealthy", "error": "Cannot connect to MongoDB"}), 503
+
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')

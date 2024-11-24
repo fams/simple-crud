@@ -9,7 +9,6 @@ services:
     ports:
       - 5000:5000
     environment:
-      - FLASK_APP=apitool/app.py
       - MONGO_URI=mongodb://mongodb:27017/my_database
     volumes:
       - ./schemas:/app/schemas
