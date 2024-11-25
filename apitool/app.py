@@ -178,5 +178,14 @@ def healthcheck():
         return jsonify({"status": "unhealthy", "error": "Cannot connect to MongoDB"}), 503
 
 
+@app.route('/collections', methods=['GET'])
+def get_collections():
+    """
+    Retorna uma lista de todas as coleções disponíveis.
+    """
+    collections = db.list_collection_names()
+    return jsonify(collections)
+
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
