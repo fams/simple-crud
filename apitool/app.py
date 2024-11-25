@@ -32,11 +32,11 @@ for filename in os.listdir(schemas_dir):
             collection = definition["collection_name"]
             schemas[collection] = definition["schema"]
         except (IOError, json.JSONDecodeError) as e:
-            print(f"Erro ao carregar o esquema {filename}: {e}")
+            print(f"Erro ao carregar o arquivo json {filename}: {e}")
             exit(1)
         except KeyError as e:
             print(f"Erro ao carregar o esquema {filename}: {e}")
-            exit(1) 
+            exit(1)
 
 
 def validate_json(data, schema):
@@ -183,7 +183,14 @@ def get_collections():
     """
     Retorna uma lista de todas as coleções disponíveis.
     """
-    collections = db.list_collection_names()
+    available_collections = schemas.keys()
+    created_collections = db.list_collection_names()
+    collections = {
+        "collections": [
+            {"schema": schemas[collection], "name": collection, "created": collection in created_collections}
+            for collection in available_collections
+        ]
+    }
     return jsonify(collections)
 
 
